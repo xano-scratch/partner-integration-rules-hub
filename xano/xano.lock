@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "objects": {
+    "app:hub": {
+      "guid": "bd0ae8305fcc8d6b0fc205f02588b3a7",
+      "canonical": "hub",
+      "canonical_source": "code"
+    },
+    "dbo:field_mappings": {
+      "guid": "0e3a9e9bbb2b0b08a7863657889a39c7"
+    },
+    "dbo:inbound_records": {
+      "guid": "084b9bcd6b066a1d487010693aca3227"
+    },
+    "dbo:partners": {
+      "guid": "8b6edf9fd6df8b2c12811ede55aace61"
+    },
+    "dbo:processing_log": {
+      "guid": "27bc08fd6d4137845511c1a434f834a2"
+    },
+    "dbo:users": {
+      "guid": "157d4a98d979cf04b9ccdb98dfc15229"
+    },
+    "dbo:validation_rules": {
+      "guid": "a12570b290002877bf5ded27ac030508"
+    },
+    "function:process_inbound": {
+      "guid": "c6c0d91977c7cd0ce8802c32e24872d7"
+    },
+    "function:require_admin": {
+      "guid": "38c4041eb14974f57058e6539234823a"
+    },
+    "query:hub|GET|auth/me": {
+      "guid": "fcc778b46721ed32cac7beb460b88557"
+    },
+    "query:hub|GET|config/{partner_id}": {
+      "guid": "a548ec7dde02f09012ba832cfe7cc690"
+    },
+    "query:hub|GET|log": {
+      "guid": "c161acfc181be7974c130d80b3d1ebfe"
+    },
+    "query:hub|GET|partners": {
+      "guid": "e99a8efc75f30978d0e177eae827bf17"
+    },
+    "query:hub|GET|record/{id}": {
+      "guid": "c5dfc71c05e6d0cfaf4f8d5c56a889b2"
+    },
+    "query:hub|GET|records": {
+      "guid": "f13693ef6658da1012120d9bf28c11e2"
+    },
+    "query:hub|GET|seed": {
+      "guid": "91e120e45c94c2778658312742a195c8"
+    },
+    "query:hub|POST|auth/login": {
+      "guid": "bae9c381344fccfbcc5c363c5823385c"
+    },
+    "query:hub|POST|ingest": {
+      "guid": "7488e9fd0de394a4eeda67b556215242"
+    },
+    "query:hub|POST|mappings": {
+      "guid": "670b6bbc6ddacb687f63fdcdcddea81a"
+    },
+    "query:hub|POST|reprocess/{record_id}": {
+      "guid": "c4373cc7b43c6c620061b1751392d316"
+    },
+    "query:hub|POST|rules": {
+      "guid": "82905ae9a09186aaf07b7caef1985062"
+    }
+  }
+}

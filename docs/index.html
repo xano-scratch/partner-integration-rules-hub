@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partner Integration Rules Hub — a governed Xano rules engine</title>
+    <meta
+      name="description"
+      content="Every partner's field mappings and validation rules in one governed Xano API: normalize inbound records to a shared shape, accept or reject against that partner's own rules, with a full audit trail."
+    />
+    <style>
+      :root {
+        --bg: #0a0a0a;
+        --card: #141414;
+        --card2: #1b1b1b;
+        --border: rgba(255, 255, 255, 0.1);
+        --fg: #fafafa;
+        --muted: #a1a1a1;
+        --primary: #fafafa;
+        --primary-fg: #171717;
+        --accent: #8b9cff;
+        --emerald: #34d399;
+        --red: #f87171;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      a { color: inherit; }
+
+      header { padding: 72px 0 40px; border-bottom: 1px solid var(--border); }
+      .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; }
+      h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; letter-spacing: -0.02em; margin: 14px 0 10px; }
+      .tagline { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0 0 20px; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .badge {
+        font-size: 12px; padding: 4px 10px; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--card2); color: var(--fg);
+      }
+      .badge.accent { border-color: rgba(139, 156, 255, 0.4); color: var(--accent); background: rgba(139, 156, 255, 0.1); }
+      .meta { font-family: ui-monospace, monospace; color: var(--muted); font-size: 14px; margin: 0 0 22px; }
+
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+        font-size: 15px; font-weight: 600; padding: 11px 20px; border-radius: 10px; border: 1px solid transparent;
+        transition: transform 0.05s ease, opacity 0.15s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn.primary { background: var(--primary); color: var(--primary-fg); }
+      .btn.primary:hover { opacity: 0.9; }
+      .btn.ghost { background: transparent; color: var(--fg); border-color: var(--border); }
+      .btn.ghost:hover { background: var(--card2); }
+
+      .shot { margin: 40px 0; }
+      .shot img { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 14px; display: block; }
+      .shot figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; text-align: center; }
+
+      section { padding: 36px 0; border-bottom: 1px solid var(--border); }
+      h2 { font-size: 24px; letter-spacing: -0.01em; margin: 0 0 18px; }
+      h3 { font-size: 16px; margin: 0 0 6px; }
+
+      .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .feature { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+      .feature p { color: var(--muted); font-size: 14px; margin: 0; }
+
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+      th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+      td code { background: var(--card2); padding: 2px 6px; border-radius: 6px; font-size: 12.5px; }
+      .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); }
+      .tag.pub { color: var(--emerald); border-color: rgba(52, 211, 153, 0.35); }
+      .tag.adm { color: var(--red); border-color: rgba(248, 113, 113, 0.35); }
+      .tag.auth { color: var(--accent); border-color: rgba(139, 156, 255, 0.35); }
+
+      ul.screens { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      ul.screens li { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 14px; }
+      ul.screens li b { display: block; margin-bottom: 2px; }
+      ul.screens li span { color: var(--muted); }
+
+      pre.prompt {
+        background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+        padding: 18px; overflow-x: auto; font-size: 13.5px; color: var(--fg); white-space: pre-wrap;
+      }
+      .steps { color: var(--muted); font-size: 14px; }
+      .steps code { background: var(--card2); padding: 2px 6px; border-radius: 6px; color: var(--fg); }
+      .note {
+        background: rgba(139, 156, 255, 0.08); border: 1px solid rgba(139, 156, 255, 0.25);
+        border-radius: 12px; padding: 16px 18px; color: var(--muted); font-size: 14px;
+      }
+      footer { padding: 32px 0 60px; color: var(--muted); font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="eyebrow">
+          <span>🛡️</span><span>A Xano proof artifact</span>
+        </div>
+        <h1>Partner Integration Rules Hub</h1>
+        <p class="tagline">
+          Every partner's field mappings and validation rules in one governed API. Inbound records are normalized to a
+          shared shape, then accepted or rejected against that partner's own versioned rules, with an audit trail of
+          every decision.
+        </p>
+        <div class="badges">
+          <span class="badge accent">Play 1 · Business Logic Centralization</span>
+          <span class="badge">Vertical · Integration</span>
+          <span class="badge">Native API-layer RBAC</span>
+        </div>
+        <p class="meta">6 tables · 12 APIs · 2 functions · TypeScript · @xanots/sdk</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://github.com/xano-scratch/partner-integration-rules-hub">View on GitHub</a>
+          <a class="btn ghost" href="#use">Use this template</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <figure class="shot">
+        <img
+          src="screenshot.png"
+          alt="The Partner Integration Rules Hub: a rejected record showing the raw payload normalized to the canonical shape, the rule that fired, the rules that applied, and the step-by-step audit trail."
+        />
+        <figcaption>A rejected record: raw input, the canonical shape, the rule that fired, and the audit trail.</figcaption>
+      </figure>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <h2>What it demonstrates</h2>
+        <div class="grid">
+          <div class="feature">
+            <h3>One rule engine, not many scripts</h3>
+            <p>Two partners send different field names and both normalize to the same canonical shape. Mappings and rules are data read from tables, not code branches.</p>
+          </div>
+          <div class="feature">
+            <h3>Versioned rules</h3>
+            <p>A partner's rule set carries a version. Add a rule, then reprocess a record to apply the current version and watch the outcome change.</p>
+          </div>
+          <div class="feature">
+            <h3>API-layer RBAC, never row-level</h3>
+            <p>Two roles. Write endpoints re-read the caller's role from the database and refuse a viewer with a 403. The gate is the API, not the UI.</p>
+          </div>
+          <div class="feature">
+            <h3>A full audit trail</h3>
+            <p>Every decision writes one log row per step, so a reviewer can read exactly why a record was accepted or rejected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>API surface</h2>
+        <p style="color: var(--muted); margin-top: -8px">All endpoints sit under the <code>hub</code> group, so the public path is <code>/api:hub/&lt;name&gt;</code>.</p>
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Access</th><th>What it enforces</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>POST</td><td><code>/auth/login</code></td><td><span class="tag pub">public</span></td><td>Verify password against the internal hash, mint a token</td></tr>
+            <tr><td>GET</td><td><code>/auth/me</code></td><td><span class="tag auth">signed-in</span></td><td>The current caller</td></tr>
+            <tr><td>GET</td><td><code>/partners</code></td><td><span class="tag auth">signed-in</span></td><td>Partners plus mappings and active rules</td></tr>
+            <tr><td>POST</td><td><code>/ingest</code></td><td><span class="tag auth">signed-in</span></td><td>The one governed job: normalize, validate, decide</td></tr>
+            <tr><td>GET</td><td><code>/records</code></td><td><span class="tag auth">signed-in</span></td><td>List and filter records by partner and status</td></tr>
+            <tr><td>GET</td><td><code>/record/{id}</code></td><td><span class="tag auth">signed-in</span></td><td>One decision with everything that explains it</td></tr>
+            <tr><td>GET</td><td><code>/log</code></td><td><span class="tag auth">signed-in</span></td><td>The processing log (the audit trail)</td></tr>
+            <tr><td>GET</td><td><code>/config/{partner_id}</code></td><td><span class="tag auth">signed-in</span></td><td>A partner's mappings and rule history</td></tr>
+            <tr><td>POST</td><td><code>/mappings</code></td><td><span class="tag adm">admin</span></td><td>Create or update a field mapping</td></tr>
+            <tr><td>POST</td><td><code>/rules</code></td><td><span class="tag adm">admin</span></td><td>Add a validation rule to a partner's set</td></tr>
+            <tr><td>POST</td><td><code>/reprocess/{record_id}</code></td><td><span class="tag adm">admin</span></td><td>Re-decide a record against the current rules</td></tr>
+            <tr><td>GET</td><td><code>/seed</code></td><td><span class="tag pub">public</span></td><td>Deterministic demo seed (idempotent)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Frontend screens</h2>
+        <ul class="screens">
+          <li><b>Partners</b><span>Each partner, its canonical target, and its mapping and active-rule counts.</span></li>
+          <li><b>Submit</b><span>Post a raw payload and see it normalized to the canonical shape with the decision.</span></li>
+          <li><b>Records</b><span>Filter and open a record: raw versus canonical, the rule that fired, the audit trail.</span></li>
+          <li><b>Log</b><span>The governance trail, one row per step of every decision.</span></li>
+          <li><b>Rules admin</b><span>View and add mappings and rules; a viewer's write is refused by the API.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="use">
+      <div class="wrap">
+        <h2>Use this template</h2>
+        <p style="color: var(--muted); margin-top: -8px">Paste this to a coding agent to clone the template and get it live on your own Xano account:</p>
+        <pre class="prompt">Clone the Xano template at https://github.com/xano-scratch/partner-integration-rules-hub and get it running on my own Xano account.
+
+1. git clone https://github.com/xano-scratch/partner-integration-rules-hub.git
+2. cd partner-integration-rules-hub && npm install
+3. npx xanots login   (one-time browser auth)
+4. npm run xano:deploy   (deploys the backend and frontend, prints the live URL)
+
+Then open the printed URL, sign in as admin@demo.test / demo1234, and help me adapt the partners, field mappings, and validation rules to my own integration domain.</pre>
+        <p class="steps">
+          Or by hand: <code>git clone</code> the repo, <code>npm install</code>, <code>npx xanots login</code>, then
+          <code>npm run xano:deploy</code>. The app seeds two demo partners and signs you in as the admin.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="note">
+          <b>About the live links.</b> This template deploys to a short-lived ephemeral Xano environment, so any
+          preview link shared from one build stops serving after it expires. The durable artifact is this repo:
+          clone it and run <code style="color: var(--fg)">npm run xano:deploy</code> for your own live copy with fresh
+          links. This is an experimental proof artifact, not a production customer reference.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        Partner Integration Rules Hub · a Xano proof artifact for Business Logic Centralization · MIT licensed.
+      </div>
+    </footer>
+  </body>
+</html>
